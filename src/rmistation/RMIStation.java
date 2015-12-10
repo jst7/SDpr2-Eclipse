@@ -7,7 +7,13 @@ import java.io.PrintWriter;
 import java.io.Serializable; 
 import java.rmi.*;
 import java.rmi.server.*;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
+import org.apache.axis2.databinding.utils.SimpleArrayReaderStateMachine;
 import org.omg.CORBA.Environment;
 
 
@@ -118,15 +124,20 @@ public class RMIStation {
              PrintWriter pw = null;
              String uname = System.getProperty("user.name");
              System.out.println("C:\\Users\\"+uname+"\\Desktop\\prueba.txt");
-             try
-             {
-            	 
+            
+            	    
+             		Calendar c = Calendar.getInstance();
+             		DateFormat df=new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            	    String fech=df.format(c.getTime());
+            	    try
+                    {
                  fichero = new FileWriter("C:\\Users\\"+uname+"\\Desktop\\prueba.txt",true);
                  pw = new PrintWriter(fichero);                 
-                 pw.println(s);
+                 pw.println("log:"+fech+"_ "+s);
                  fichero.close();
              }
              catch(Exception e){
+            	 System.out.println(e.getMessage());
             	 System.out.println("no se puede acceder");
              }
         	
