@@ -24,35 +24,80 @@ public class RMIStation {
     private String humedad="2";
     private String luminosidad="3";
     private String pantalla="4";
+    private String user;
+    private String key="pistola";
     
 	public RMIStation () {
 		String uname = System.getProperty("user.name");
+		
         leerArchivo("C:\\Users\\"+uname+"\\Desktop\\station1.txt");		
 	}
         
         public String GetTemperatura(){
         
         	escribirlog("Peticion temperatura: "+temperatura);
-            return temperatura;
+        	encripta a=new encripta();
+        	String temp="";
+        	try{
+        	 temp=a.encrypt(temperatura, key);
+        	}
+        	catch(Exception e){}
+        	
+            return temp;
         }
         
         public String GetHumedad(){
         	escribirlog("Peticion humedad: "+humedad);
-        	return humedad;
+        	encripta a=new encripta();
+        	String hum="";
+        	try{
+        	 hum=a.encrypt(humedad, key);
+        	}
+        	catch(Exception e){}
+        	
+            return hum;
         }
         
         public String Getluminosidad() {
         	escribirlog("Peticion luminosidad: "+luminosidad);
-            return luminosidad;
+        	encripta a=new encripta();
+        	String lum="";
+        	try{
+        	 lum=a.encrypt(luminosidad, key);
+        	}
+        	catch(Exception e){}
+        	
+            return lum;
         }
         public  String GetPantalla(){
         	escribirlog("Peticion pantalla: "+pantalla);
-            return pantalla;
+        	encripta a=new encripta();
+        	String pan="";
+        	try{
+        	 pan=a.encrypt(pantalla, key);
+        	}
+        	catch(Exception e){}
+        	
+            return pan;
         }
         public void SetPantalla(String p){
-            pantalla=p;
-            escribirpantalla(pantalla);
+        	encripta a=new encripta();
+        	
+        	try{
+        	pantalla=a.decrypt(p, key);
+        	}catch(Exception e){}
+        	escribirpantalla(pantalla);
             escribirlog("Escritura pantalla: "+pantalla);
+        }
+        
+        public void SetUsuario (String p){
+        	encripta a=new encripta();
+        	
+        	try{
+        	user=a.decrypt(p, key);
+        	}catch(Exception e){}
+        	escribirpantalla(user);
+            escribirlog("Inicio de Sesion: "+user+"---------------------------------------");
         }
         
         public String leerArchivo(String s) {
@@ -122,6 +167,7 @@ public class RMIStation {
         	
         	 FileWriter fichero = null;
              PrintWriter pw = null;
+             String ip = System.getProperty("ip.name");
              String uname = System.getProperty("user.name");
              System.out.println("C:\\Users\\"+uname+"\\Desktop\\prueba.txt");
             
@@ -131,9 +177,9 @@ public class RMIStation {
             	    String fech=df.format(c.getTime());
             	    try
                     {
-                 fichero = new FileWriter("C:\\Users\\"+uname+"\\Desktop\\prueba.txt",true);
+                 fichero = new FileWriter("C:\\Users\\"+uname+"\\Desktop\\log_servidor.txt",true);
                  pw = new PrintWriter(fichero);                 
-                 pw.println("log:"+fech+"_ "+s);
+                 pw.println("log: "+fech+"_ "+" "+s);
                  fichero.close();
              }
              catch(Exception e){
